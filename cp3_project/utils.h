@@ -5,22 +5,24 @@
 #include "pokemon.h"
 #include "player.h"
 
-void initialize(Type Types[18],
-                Move Moves[486],
-                Pokemon Pokemons[1015],
+void initialize(Type Types[],
+                Move Moves[],
+                Pokemon Pokemons[],
                 Player *Player1,
                 Player *Player2);
 
-void initializeTypes(Type Types[18]);
-void initializeMoves(Move Moves[486], Type Types[18]);
-void initializePokemons(Pokemon Pokemons[1015], Type Types[18], Move Moves[486]);
-void initializePlayers(Player *Player1, Player *Player2, Pokemon Pokemons[1015]);
+void initializeTypes(Type Types[]);
+void initializeMoves(Move Moves[], Type Types[]);
+void initializePokemons(Pokemon Pokemons[], Type Types[], Move Moves[]);
 
-void round(Type Types[18], Player *Player1, Player *Player2);
 
-void game(Type Types[18],
-          Move Moves[486],
-          Pokemon Pokemons[1015],
+//BAK
+void round(Type Types[], Player *Player1, Player *Player2);
+
+//BAK
+void game(Type Types[],
+          Move Moves[],
+          Pokemon Pokemons[],
           Player *Player1,
           Player *Player2);
 

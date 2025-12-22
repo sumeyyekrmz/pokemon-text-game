@@ -6,7 +6,7 @@
 
 int main(void)
 {
-    Type Types[18];
+    Type Types[19];
     Move Moves[486];
     Pokemon Pokemons[1015];
     Player Player1;
@@ -14,6 +14,7 @@ int main(void)
 
     initialize(Types, Moves, Pokemons, &Player1, &Player2);
 
+    //BAK
     game(Types, Moves, Pokemons, &Player1, &Player2);
 
     return 0;
