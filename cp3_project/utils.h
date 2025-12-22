@@ -16,10 +16,10 @@ void initializeMoves(Move Moves[], Type Types[]);
 void initializePokemons(Pokemon Pokemons[], Type Types[], Move Moves[]);
 
 
-//BAK
+//BAK bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 void round(Type Types[], Player *Player1, Player *Player2);
 
-//BAK
+//BAK bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 void game(Type Types[],
           Move Moves[],
           Pokemon Pokemons[],

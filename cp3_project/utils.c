@@ -197,110 +197,111 @@ void initializePokemons(Pokemon Pokemons[], Type Types[], Move Moves[]) {
 }
 
 
-//BAK
+//BAK bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 void round(Player *Player1, Player *Player2, Type Types[]) {
 
-    // Oyuncuların ana seçimleri (1: Attack, 2: Change Pokemon)
+    //Player1 ve Player2 nin seçimleri
     int choice1, choice2;
 
-    // Seçilen move indexleri (henüz seçilmediği için -1)
+    //seçilen move ların indexleri (henüz seçilmediği için -1)
     int moveIdx1 = -1, moveIdx2 = -1;
 
-    // -------- PLAYER 1 ANA SEÇİM --------
-    printf("Player 1, select your move:\n");
+    //Player 1 in seçimi
+    printf("Player 1, please select your move:\n");// BURADA PLAYER İSMİNİ ÇEKEBİLİRSİN bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
     printf("1 - Attack\n");
     printf("2 - Change Pokemon\n");
     printf("Choice: ");
     scanf("%d", &choice1);
 
-    // -------- PLAYER 2 ANA SEÇİM --------
-    printf("Player 2, select your move:\n");
+    //Player 2 nin seçimi
+    printf("Player 2, please select your move:\n");// BURADA PLAYER İSMİNİ ÇEKEBİLİRSİN bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
     printf("1 - Attack\n");
     printf("2 - Change Pokemon\n");
     printf("Choice: ");
     scanf("%d", &choice2);
 
-    // -------- PLAYER 1 DETAYLI SEÇİM --------
+    //Player 1 Attack
     if (choice1 == 1) {  
-        // Player 1 saldırı seçtiyse
 
+        //BAK bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
         // Aktif Pokemon'un adresi alınır
         // currentIndex 1'den başladığı için -1 yapılır
         Pokemon *p1 = &Player1->Pokemons[Player1->currentIndex - 1];
 
-        // Pokemon'un 4 move'u listelenir
+        //pokemonun 4 move unu listeler
         for (int i = 0; i < 4; i++) {
             printf("%d - %-15s ", i + 1, p1->moves[i].name);
 
-            // Her 2 move'da bir alt satıra geç
+            // Her 2 move'da bir alt satıra geç BAK bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
             if ((i + 1) % 2 == 0)
                 printf("\n");
         }
 
-        // Kullanıcıdan move seçimi alınır
+        // Kullanıcıdan move seçimi alınır    bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
         printf("Please select a move: ");
         scanf("%d", &moveIdx1);
 
-        // 1–4 arası girilen değer 0–3 aralığına çevrilir
+        // 1–4 arası girilen değer 0–3 aralığına çevrilir bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
         moveIdx1--;
 
-    } else {
-        // Player 1 Pokemon değiştirmek isterse
+    } else { //Player 1 Change Pokemon
 
         printf("Available Pokemons:\n");
 
-        // Oyuncunun 6 Pokemon'u dolaşılır
         for (int i = 0; i < 6; i++) {
 
-            // HP'si 0'dan büyük olanlar (ölü olmayanlar) listelenir
+            //oyuncunun ölü olmayan pokemonları listelenir
             if (Player1->Pokemons[i].currentHP > 0) {
                 printf("%d - %s ", i + 1, Player1->Pokemons[i].name);
             }
         }
 
-        // Yeni aktif Pokemon seçilir
+        //aktif pokemon değiştirilir
         printf("\nPlease select a Pokemon to switch: ");
         scanf("%d", &Player1->currentIndex);
     }
 
-    // -------- PLAYER 2 DETAYLI SEÇİM --------
+    //Player 2 Attack
     if (choice2 == 1) {
-        // Player 2 saldırı seçtiyse
-
-        // Player 2'nin aktif Pokemon'u
+        
+        //BAK bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+        // Aktif Pokemon'un adresi alınır
+        // currentIndex 1'den başladığı için -1 yapılır
         Pokemon *p2 = &Player2->Pokemons[Player2->currentIndex - 1];
 
-        // 4 move listelenir
+        //pokemonun 4 move unu listeler
         for (int i = 0; i < 4; i++) {
             printf("%d - %-15s ", i + 1, p2->moves[i].name);
 
+            // Her 2 move'da bir alt satıra geç BAK bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
             if ((i + 1) % 2 == 0)
                 printf("\n");
         }
 
-        // Move seçimi alınır
+        // Kullanıcıdan move seçimi alınır    bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
         printf("Please select a move: ");
         scanf("%d", &moveIdx2);
 
-        // 0-tabanlı indexe çevirilir
+        // 1–4 arası girilen değer 0–3 aralığına çevrilir bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
         moveIdx2--;
 
-    } else {
-        // Player 2 Pokemon değiştirmek isterse
+    } else { //Player 1 Change Pokemon
 
         printf("Available Pokemons:\n");
 
         for (int i = 0; i < 6; i++) {
+
+            //oyuncunun ölü olmayan pokemonları listelenir
             if (Player2->Pokemons[i].currentHP > 0) {
                 printf("%d - %s ", i + 1, Player2->Pokemons[i].name);
             }
         }
 
-        // Yeni aktif Pokemon seçilir
+        //aktif pokemon değiştirilir
         printf("\nPlease select a Pokemon to switch: ");
         scanf("%d", &Player2->currentIndex);
     }
-
+    //bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
     // -------- HASAR HESAPLAMA --------
     // Tüm seçimler alındıktan sonra burada damage hesaplanacak
     // calculateDamage(Player1, Player2, choice1, choice2, moveIdx1, moveIdx2, Types);
