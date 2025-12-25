@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "type.h"
 #include "move.h"
 #include "pokemon.h"
@@ -6,6 +7,8 @@
 
 int main(void)
 {
+    printf("PROGRAM STARTED\n");
+
     Type Types[19];
     Move Moves[486];
     Pokemon Pokemons[1015];
@@ -15,7 +18,7 @@ int main(void)
     initialize(Types, Moves, Pokemons, &Player1, &Player2);
 
     //BAK
-    game(Types, Moves, Pokemons, &Player1, &Player2);
+    game(&Player1, &Player2);
 
     return 0;
 }

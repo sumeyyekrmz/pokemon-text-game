@@ -1,204 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
 #include "utils.h"
-#include "pokemon.h"
 #include "player.h"
-#include "move.h"
 #include "type.h" 
-
-void initialize(Type Types[], Move Moves[], Pokemon Pokemons[], Player* Player1, Player* Player2)
-{
-    initializeTypes(Types);
-    initializeMoves(Moves, Types);
-    initializePokemons(Pokemons, Types, Moves);
-
-    //rastgele pokemon atama
-    srand(time(NULL));
-
-    //player isimlerini atama
-    strcpy(Player1->name, "Esila");
-    strcpy(Player2->name, "Sümeyye");
-
-    Player1->currentIndex = 1;
-    Player2->currentIndex = 1;
-
-    //kullanılan pokemonların indexinin saklanacağı array
-    int usedPokemon[1015] = {0};
-
-    //Player1 e rastgele pokemon atama
-    for (int i = 0; i < 6; i++) {
-        int index;
-
-        do {
-            index = rand() % 1015;
-        } while (usedPokemon[index]);// 0/1 e göre dublicate kontrolü
-
-        usedPokemon[index] = 1;//kullanılan pokemonları 1 olarak işaretleme
-        Player1->Pokemons[i] = Pokemons[index];
-    }
-
-    //Player2 ye rastgele pokemon atama
-    for (int i = 0; i < 6; i++) {
-        int index;
-
-        do {
-            index = rand() % 1015;
-        } while (usedPokemon[index]);
-
-        usedPokemon[index] = 1;
-        Player2->Pokemons[i] = Pokemons[index];
-    }
-}
-
-
-void initializeTypes(Type types[])
-{
-    //dosyayı okumak için açma
-    FILE* file = fopen("types.txt", "r");
-    if (file == NULL) {
-        printf("Error: types.txt could not be opened.\n");
-        return;
-    }
-
-    for (int i = 0; i < 18; i++) {
-
-        //attack yapan pokemonun type ı 
-        fscanf(file, "%s", types[i].name);
-
-        for (int j = 0; j < 18; j++) {
-
-            //defans yapan pokemonun type ı ve hasar çarpanı
-            fscanf(file, "%s %lf",
-                   types[i].effects[j].defName,
-                   &types[i].effects[j].multiplier);
-
-            //atkName = attack yapan pokemonun ismi
-            strcpy(types[i].effects[j].atkName, types[i].name);
-        }
-    }
-
-    //dosyayı kapatma
-    fclose(file);
-
-    //None type ını oluşturma ve 19. eleman olarak atama
-    strcpy(types[18].name, "None");
-    
-    for (int j = 0; j < 19; j++) {
-        strcpy(types[18].effects[j].atkName, "None");
-        strcpy(types[18].effects[j].defName, types[j].name);
-        types[18].effects[j].multiplier = 1.0;
-    }
-}
-
-
-void initializeMoves(Move Moves[], Type Types[]) {
-
-    //dosyayı okumak için açma
-    FILE *file = fopen("moves.txt", "r");
-    if (file == NULL) {
-        printf("Error: Could not open moves.txt!\n");
-        return;
-    }
-
-    //isimleri tutmak için geçici parametreler
-    char typeName[50];
-    char categoryName[50];
-
-    for (int i = 0; i < 486; i++) {
-        fscanf(file, "%s %s %s %d", Moves[i].name, typeName, categoryName, &Moves[i].power);
-
-        //typeName i Types arrayinde bulup move a atama
-        for (int j = 0; j < 18; j++) {
-            if (strcmp(typeName, Types[j].name) == 0) {
-                Moves[i].type = Types[j];
-                break;
-            }
-        }
-
-        //catagoryName in special/physical olduğuna karar verip atama
-        if (strcmp(categoryName, "Special") == 0) {
-            Moves[i].category = Special_attack;
-        } else {
-            Moves[i].category = Physical_attack;
-        }
-    }
-
-    //dosyayı kapatma
-    fclose(file);
-}
-
-
-void initializePokemons(Pokemon Pokemons[], Type Types[], Move Moves[]) {
-    
-    //dosyayı okumak için açma
-    FILE *file = fopen("pokemon.txt", "r");
-    if (file == NULL) {
-        printf("Pokemon dosyasi bulunamadi!\n");
-        return;
-    }
-
-    //typeName leri tutmak için geçici parametreler
-    char typeName1[50], typeName2[50];
-
-    for (int i = 0; i < 1015; i++) {
-        fscanf(file, "%s %s %s %d %d %d %d %d %d", 
-               Pokemons[i].name, typeName1, typeName2, 
-               &Pokemons[i].maxHP, &Pokemons[i].attack, &Pokemons[i].defense, 
-               &Pokemons[i].spAtk, &Pokemons[i].spDef, &Pokemons[i].speed);
-
-        //başlangıçta can tam dolu
-        Pokemons[i].currentHP = Pokemons[i].maxHP;
-
-        for (int j = 0; j < 18; j++) {
-            //typeName1 i arrayde bul ve pokemonun types arrayinin 1. elemanına ata
-            if (strcmp(typeName1, Types[j].name) == 0) {
-                Pokemons[i].types[0] = Types[j];
-            }
-
-            
-            if (strcmp(typeName2, "-") == 0) {
-                //Eğer 2. type ı yoksa Types arrayinin 19. elemanı none ata
-                Pokemons[i].types[1] = Types[18];
-            } else {
-                //typeName2 i arrayde bul ve pokemonun types arrayinin 2. elemanına ata
-                for (int j = 0; j < 18; j++) {
-                    if (strcmp(typeName2, Types[j].name) == 0) {
-                    Pokemons[i].types[1] = Types[j];
-                    break;
-                    }
-                }
-            }
-        }
-
-        // 4 tane random unıqe move seçme
-        int count = 0;
-        while (count < 4) {
-            int randomIdx = rand() % 486;
-            int isDuplicate = 0;
-
-            //hareket daha önce eklenmiş mi kontrol
-            for (int k = 0; k < count; k++) { 
-                if (strcmp(Pokemons[i].moves[k].name, Moves[randomIdx].name) == 0) {
-                    isDuplicate = 1;
-                    break;
-                }
-            }
-
-            //hareket yeni ise kaydetme
-            if (!isDuplicate) {
-                Pokemons[i].moves[count] = Moves[randomIdx];
-                count++;
-            }
-        }
-    }
-    fclose(file);
-}
 
 
 //BAK bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-void round(Player *Player1, Player *Player2, Type Types[]) {
+void roundFunction(Player *Player1, Player *Player2) {
 
     //Player1 ve Player2 nin seçimleri
     int choice1, choice2;
@@ -303,7 +112,118 @@ void round(Player *Player1, Player *Player2, Type Types[]) {
     }
     //bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
     // -------- HASAR HESAPLAMA --------
+    applyDamage(Player1, Player2, choice1, choice2, moveIdx1, moveIdx2);
+
     // Tüm seçimler alındıktan sonra burada damage hesaplanacak
     // calculateDamage(Player1, Player2, choice1, choice2, moveIdx1, moveIdx2, Types);
+}
+
+
+
+void applyDamage(Player *Player1, Player *Player2, int choice1, int choice2, int moveIdx1, int moveIdx2) {
+    Player *first, *second;
+    int firstChoice, secondChoice, firstMove, secondMove;
+
+    Pokemon *p1 = &Player1->Pokemons[Player1->currentIndex - 1];
+    Pokemon *p2 = &Player2->Pokemons[Player2->currentIndex - 1];
+
+    // Hız kontrolü: Daha hızlı olan Pokémon önce saldırır.
+    if (p1->speed >= p2->speed) {
+        first = Player1; second = Player2;
+        firstChoice = choice1; secondChoice = choice2;
+        firstMove = moveIdx1; secondMove = moveIdx2;
+    } else {
+        first = Player2; second = Player1;
+        firstChoice = choice2; secondChoice = choice1;
+        firstMove = moveIdx2; secondMove = moveIdx1;
+    }
+
+    // İki saldırı aşaması (Önce hızlı olan, sonra yavaş olan)
+    for (int i = 0; i < 2; i++) {
+        Player *attacker = (i == 0) ? first : second;
+        Player *defender = (i == 0) ? second : first;
+        int currentChoice = (i == 0) ? firstChoice : secondChoice;
+        int currentMoveIdx = (i == 0) ? firstMove : secondMove;
+
+        Pokemon *atk = &attacker->Pokemons[attacker->currentIndex - 1];
+        Pokemon *def = &defender->Pokemons[defender->currentIndex - 1];
+
+        // Eğer oyuncu 'Change Pokemon' seçtiyse o tur saldıramaz.
+        // Ayrıca defender zaten bayıldıysa veya attacker baygınsa saldırı gerçekleşmez.
+        if (currentChoice == 2 || def->currentHP <= 0 || atk->currentHP <= 0) continue;
+
+        Move *m = &atk->moves[currentMoveIdx];
+        
+        // Saldırı ve Savunma statlarının seçimi (Physical/Special ayrımı) [cite: 224, 225]
+        double attackStat = (m->category == Physical_attack) ? atk->attack : atk->spAtk;
+        double defenseStat = (m->category == Physical_attack) ? def->defense : def->spDef;
+
+        // Tip Etkinliği (TypeEffect) hesaplama [cite: 226]
+        double te1 = 1.0, te2 = 1.0;
+        for (int j = 0; j < 19; j++) {
+            // Hamle tipinin defender'ın birinci tipine etkisi
+            if (strcmp(def->types[0].effects[j].atkName, m->type.name) == 0) {
+                 te1 = m->type.effects[j].multiplier;
+            }
+            // Hamle tipinin defender'ın ikinci tipine etkisi (Eğer "None" değilse) 
+            if (strcmp(def->types[1].name, "None") != 0) {
+                if (strcmp(m->type.name, def->types[1].effects[j].atkName) == 0) {
+                    te2 = m->type.effects[j].multiplier;
+                }
+            }
+        }
+
+        // STAB Kontrolü (Aynı Tip Saldırı Bonusu) [cite: 227]
+        double stab = (strcmp(m->type.name, atk->types[0].name) == 0 || 
+                       strcmp(m->type.name, atk->types[1].name) == 0) ? 1.5 : 1.0;
+
+        // PDF'teki Final Hasar Formülü 
+        double damage = m->power * (attackStat / defenseStat) * te1 * te2 * stab;
+        
+        def->currentHP -= (int)damage;
+        if (def->currentHP < 0) def->currentHP = 0;
+
+        printf("%s used %s! It dealt %d damage to %s.\n", atk->name, m->name, (int)damage, def->name);
+
+        // Bayılma Kontrolü: Eğer Pokémon bayılırsa bir sonraki uygun olan seçilir[cite: 219, 229].
+        if (def->currentHP <= 0) {
+            printf("%s fainted!\n", def->name);
+            for (int k = 0; k < 6; k++) {
+                if (defender->Pokemons[k].currentHP > 0) {
+                    defender->currentIndex = k + 1; // 1-tabanlı index [cite: 212]
+                    printf("%s sent out %s!\n", defender->name, defender->Pokemons[k].name);
+                    break;
+                }
+            }
+            // Defender bayıldığı için bu tur saldırı sırası ondaysa saldıramaz.
+            break; 
+        }
+    }
+}
+
+
+
+
+void game(Player *Player1, Player *Player2) {
+    while (1) {
+        int p1_has_pokemon = 0, p2_has_pokemon = 0;
+
+        // Oyunun bitip bitmediğini kontrol et 
+        for (int i = 0; i < 6; i++) {
+            if (Player1->Pokemons[i].currentHP > 0) p1_has_pokemon = 1;
+            if (Player2->Pokemons[i].currentHP > 0) p2_has_pokemon = 1;
+        }
+
+        if (!p1_has_pokemon) {
+            printf("\n*** %s has no more Pokemons! %s wins the game! ***\n", Player1->name, Player2->name);
+            break;
+        }
+        if (!p2_has_pokemon) {
+            printf("\n*** %s has no more Pokemons! %s wins the game! ***\n", Player2->name, Player1->name);
+            break;
+        }
+
+        roundFunction(Player1, Player2);
+    }
 }
 
