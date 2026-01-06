@@ -5,7 +5,6 @@
 #include "pokemon.h"
 #include "player.h"
 
-//BAK bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 void roundFunction(Player *Player1,
            Player *Player2);
 
@@ -16,7 +15,6 @@ void applyDamage(Player *Player1,
                  int moveIdx1,
                  int moveIdx2);
 
-//BAK bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 void game(Player *Player1,
           Player *Player2);
 

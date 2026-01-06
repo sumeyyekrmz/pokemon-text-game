@@ -5,13 +5,15 @@
 #include "player.h"
 #include "utils.h"
 
-int main(void)
-{
-    printf("PROGRAM STARTED\n");
-
-    Type Types[19];
+Type Types[19];
     Move Moves[486];
     Pokemon Pokemons[1015];
+
+int main(void)
+{
+    printf("GAME STARTED\n\n");
+
+    
     Player Player1;
     Player Player2;
 

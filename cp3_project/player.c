@@ -16,7 +16,7 @@ void initialize(Type Types[], Move Moves[], Pokemon Pokemons[], Player* Player1,
 
     //player isimlerini atama
     strcpy(Player1->name, "Esila");
-    strcpy(Player2->name, "Sümeyye");
+    strcpy(Player2->name, "Sumeyye");
 
     Player1->currentIndex = 1;
     Player2->currentIndex = 1;

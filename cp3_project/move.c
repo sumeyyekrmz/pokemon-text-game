@@ -18,7 +18,7 @@ void initializeMoves(Move Moves[], Type Types[]) {
     char categoryName[50];
 
     for (int i = 0; i < 486; i++) {
-        fscanf(file, "%s %s %s %d", Moves[i].name, typeName, categoryName, &Moves[i].power);
+        fscanf(file, "%s %s %s %f", Moves[i].name, typeName, categoryName, &Moves[i].power);
 
         //typeName i Types arrayinde bulup move a atama
         for (int j = 0; j < 18; j++) {

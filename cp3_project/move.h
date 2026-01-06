@@ -11,7 +11,7 @@ typedef struct {
     char name[50];
     Type type;
     Category category;
-    int power;
+    float power;
 } Move;
 
 void initializeMoves(Move Moves[], Type Types[]);
